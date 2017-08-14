@@ -4,6 +4,7 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
+#include <avr/wdt.h>
 
 #define DHTPIN         A7 // Because of wire length
 #define SOIL1         A13
@@ -36,13 +37,19 @@ char           returnmsg[100];
 ////////  System setup  //////////
 //////////////////////////////////
 void setup(){
+  wdt_enable(WDTO_8S);
+  wdt_reset();
   configureGPIOs();
   Serial.begin(57600);
   dht.begin();
+  wdt_reset();
   Ethernet.begin(mac, ip);
+  wdt_reset();
   delay(1500); // Give the network some time to startup
+  wdt_reset();
   client.setServer(server, 1883);
   client.setCallback(callback);
+  wdt_reset();
 }
 
 void configureGPIOs(){
@@ -76,8 +83,8 @@ void reconnect() {
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      delay(5000);
+      Serial.println(" try again in 1 seconds");
+      delay(1000);
     }
   }
 }
@@ -242,26 +249,62 @@ void publishMotion(){
 }
 
 void publishSensors(){
+
   publishTemperature();
+  wdt_reset();
+  client.loop();
+  
   publishHumidity();
+  wdt_reset();
+  client.loop();
+  
   publishWaterlevel();  
+  wdt_reset();
+  client.loop();
+
   publishLeaf();
+  wdt_reset();
+  client.loop();
+  
   publishSoilfront();
+  wdt_reset();
+  client.loop();
+  
   publishSoilback();
+  wdt_reset();
+  client.loop();
+  
   publishDoor();
+  wdt_reset();
+  client.loop();
+  
   publishMotion();
+  wdt_reset();
+  client.loop();
+  
+  wdt_reset();
+  client.loop();
 }
 
 ////////////////////////
 //////// MAIN  /////////
 ////////////////////////
 void loop(){
+  
+  // Watchdog
+  wdt_reset();
+
   // MQTT Handling
   if (!client.connected()) {
     reconnect();
+    yield();
+    wdt_reset();
   }
+  yield();
+  wdt_reset();
   client.loop();
-
+  wdt_reset();
+  yield();
   // Sensor Handling
   if (sensorLoopCount++ > SENSORLOOP){
       publishSensors();
