@@ -5,9 +5,10 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 #include <avr/wdt.h>
 
-#define DHTPIN         A7 // Because of wire length
 #define SOIL1         A13
 #define SOIL2         A14
 #define LEAFSENSOR    A15
@@ -22,32 +23,35 @@
 #define WATERLEVEL5    39
 #define MOTION         41
 #define DOOR           43
+#define DALLASPIN      45
+#define DHTPIN         47
 #define DONOTUSE1      51 // MQTT Disconnects when used
-#define SENSORLOOP 100000
 
-uint32_t       sensorLoopCount          = 0;
-byte           mac[]                    = {  0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xED };
-IPAddress      ip(192, 168, 2, 236);
-IPAddress      server(192, 168, 2, 5);
-DHT_Unified    dht(DHTPIN, DHT22);
-EthernetClient ethClient;
-PubSubClient   client(ethClient);
-char           returnmsg[100];
+#define TEMPERATURE_PRECISION 12
+#define SENSORLOOP 50000
+
+uint32_t          sensorLoopCount = 0;
+byte              mac[]           = {  0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xED };
+IPAddress         ip(192, 168, 2, 236);
+IPAddress         server(192, 168, 2, 5);
+DHT_Unified       dht(DHTPIN, DHT22);
+EthernetClient    ethClient;
+PubSubClient      client(ethClient);
+char              returnmsg[100];
+OneWire           oneWire(DALLASPIN);
+DallasTemperature sensors(&oneWire);
+DeviceAddress     deepDallas    = {0x28, 0xFF, 0xAE, 0x23, 0xC2, 0x17, 0x01, 0xE1};
+DeviceAddress     surfaceDallas = {0x28, 0xFF, 0x04, 0x5F, 0xC2, 0x17, 0x01, 0xD5};
 
 ///////////////////////////////
 /////// MQTT Handling /////////
 ///////////////////////////////
 void reconnect() {
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
     if (client.connect("gartenErection")) {
-      Serial.println("connected");
       client.publish("garden/waterbox/system", "startup");
       client.subscribe("garden/irrigation/#");
     } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 1 seconds");
       delay(1000);
     }
   }
@@ -56,15 +60,12 @@ void reconnect() {
 void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
   String topic = String(topicchars);
   char payload[100];
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
+
   for (uint8_t i = 0; i < length; i++) {
     payload[i] = payloadbytes[i];
   }
+
   payload[length] = '\0';
-  Serial.println(payload);
-  //double dval = atof(vchar);
    
   if (String("garden/irrigation/rainpump") == topic){
 
@@ -73,7 +74,6 @@ void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
     }
     
     if(String("off") == String(payload)){
-      Serial.println("off");
       digitalWrite(REL1, true);
     }
     
@@ -86,7 +86,6 @@ void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
     }
     
     if(String("off") == String(payload)){
-      Serial.println("off");
       digitalWrite(REL2, true);
     }
     
@@ -99,7 +98,6 @@ void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
     }
     
     if(String("off") == String(payload)){
-      Serial.println("off");
       digitalWrite(REL3, true);
     }
     
@@ -112,7 +110,6 @@ void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
     }
     
     if(String("off") == String(payload)){
-      Serial.println("off");
       digitalWrite(REL4, true);
     }
     
@@ -207,47 +204,29 @@ void publishDoor(){
 }
 
 void publishMotion(){
-  if(digitalRead(DOOR)){
+  if(digitalRead(MOTION)){
     client.publish("garden/cellarentrance/motion", "now");
   }
 }
 
+void publishGroundTemp(){
+  prepareFloatVal(sensors.getTempC(deepDallas));
+  client.publish("garden/irrigation/tempdeep", returnmsg);
+  prepareFloatVal(sensors.getTempC(surfaceDallas));
+  client.publish("garden/irrigation/tempsurface", returnmsg);
+}
+
 void publishSensors(){
-
-  publishTemperature();
-  wdt_reset();
-  client.loop();
-  
+  sensors.requestTemperatures();
+  publishTemperature();  
   publishHumidity();
-  wdt_reset();
-  client.loop();
-  
   publishWaterlevel();  
-  wdt_reset();
-  client.loop();
-
   publishLeaf();
-  wdt_reset();
-  client.loop();
-  
   publishSoilfront();
-  wdt_reset();
-  client.loop();
-  
   publishSoilback();
-  wdt_reset();
-  client.loop();
-  
   publishDoor();
-  wdt_reset();
-  client.loop();
-  
   publishMotion();
-  wdt_reset();
-  client.loop();
-  
-  wdt_reset();
-  client.loop();
+  publishGroundTemp();
 }
 
 ////////////////////////
@@ -261,19 +240,17 @@ void loop(){
   // MQTT Handling
   if (!client.connected()) {
     reconnect();
-    yield();
-    wdt_reset();
   }
-  yield();
-  wdt_reset();
+
+  // Handle MQTT
   client.loop();
-  wdt_reset();
-  yield();
+
   // Sensor Handling
   if (sensorLoopCount++ > SENSORLOOP){
       publishSensors();
       sensorLoopCount = 0;
   }
+
 }
 
 //////////////////////////////////
@@ -298,19 +275,28 @@ void configureGPIOs(){
   pinMode(MOTION,      INPUT);
 }
 
-
 void setup(){
+  
+  // Active watchdog with 8 seconds timeout
   wdt_enable(WDTO_8S);
   wdt_reset();
+
+  // GPIOs
   configureGPIOs();
-  Serial.begin(57600);
+    
+  // DHT Sensor
   dht.begin();
-  wdt_reset();
+  
+  // Dallas sensors
+  sensors.begin();
+  sensors.setResolution(deepDallas,    12);
+  sensors.setResolution(surfaceDallas, 12);
+
+  // Ethernet
   Ethernet.begin(mac, ip);
-  wdt_reset();
   delay(1500); // Give the network some time to startup
-  wdt_reset();
+
+  // connect to MQTT  
   client.setServer(server, 1883);
   client.setCallback(callback);
-  wdt_reset();
 }
