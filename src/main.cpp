@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
@@ -32,43 +33,6 @@ DHT_Unified    dht(DHTPIN, DHT22);
 EthernetClient ethClient;
 PubSubClient   client(ethClient);
 char           returnmsg[100];
-
-//////////////////////////////////
-////////  System setup  //////////
-//////////////////////////////////
-void setup(){
-  wdt_enable(WDTO_8S);
-  wdt_reset();
-  configureGPIOs();
-  Serial.begin(57600);
-  dht.begin();
-  wdt_reset();
-  Ethernet.begin(mac, ip);
-  wdt_reset();
-  delay(1500); // Give the network some time to startup
-  wdt_reset();
-  client.setServer(server, 1883);
-  client.setCallback(callback);
-  wdt_reset();
-}
-
-void configureGPIOs(){
-  pinMode(REL1, OUTPUT);
-  pinMode(REL2, OUTPUT);
-  pinMode(REL3, OUTPUT);
-  pinMode(REL4, OUTPUT);
-  digitalWrite(REL1, true);
-  digitalWrite(REL2, true);
-  digitalWrite(REL3, true);
-  digitalWrite(REL4, true);
-  pinMode(WATERLEVEL1, INPUT_PULLUP);
-  pinMode(WATERLEVEL2, INPUT_PULLUP);
-  pinMode(WATERLEVEL3, INPUT_PULLUP);
-  pinMode(WATERLEVEL4, INPUT_PULLUP);
-  pinMode(WATERLEVEL5, INPUT_PULLUP);
-  pinMode(DOOR,        INPUT_PULLUP);
-  pinMode(MOTION,      INPUT);
-}
 
 ///////////////////////////////
 /////// MQTT Handling /////////
@@ -310,4 +274,43 @@ void loop(){
       publishSensors();
       sensorLoopCount = 0;
   }
+}
+
+//////////////////////////////////
+////////  System setup  //////////
+//////////////////////////////////
+
+void configureGPIOs(){
+  pinMode(REL1, OUTPUT);
+  pinMode(REL2, OUTPUT);
+  pinMode(REL3, OUTPUT);
+  pinMode(REL4, OUTPUT);
+  digitalWrite(REL1, true);
+  digitalWrite(REL2, true);
+  digitalWrite(REL3, true);
+  digitalWrite(REL4, true);
+  pinMode(WATERLEVEL1, INPUT_PULLUP);
+  pinMode(WATERLEVEL2, INPUT_PULLUP);
+  pinMode(WATERLEVEL3, INPUT_PULLUP);
+  pinMode(WATERLEVEL4, INPUT_PULLUP);
+  pinMode(WATERLEVEL5, INPUT_PULLUP);
+  pinMode(DOOR,        INPUT_PULLUP);
+  pinMode(MOTION,      INPUT);
+}
+
+
+void setup(){
+  wdt_enable(WDTO_8S);
+  wdt_reset();
+  configureGPIOs();
+  Serial.begin(57600);
+  dht.begin();
+  wdt_reset();
+  Ethernet.begin(mac, ip);
+  wdt_reset();
+  delay(1500); // Give the network some time to startup
+  wdt_reset();
+  client.setServer(server, 1883);
+  client.setCallback(callback);
+  wdt_reset();
 }
