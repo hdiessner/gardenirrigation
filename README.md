@@ -12,7 +12,9 @@ pio run -t upload
 all the neccessary libraries will be automatically cloned from
 github.
 
-# Pinout
+# Hardware
+
+## Pinout ATMeta
 
 | I/O Description | PIN |  Remark  |
 |-----------------|-----|----------|
@@ -33,9 +35,20 @@ github.
 | DALLASPIN       |  45 | DS18B20  |
 | DHTPIN          |  47 | DHT22    |
 
-# Schematics
-![schematics](https://github.com/hdiessner/gardenirrigation/blob/master/hardware/Schematics.png "Schematics")
+## DHT22
+Left to right 1,2,3,4
 
+| Number | Purpose | Wire colour |
+|--------|---------|-------------|
+| 1      | VCC     | Red         |
+| 2      | Data    | Yellow      |
+| 3      | NC      | White       |
+| 4      | GND     | Black       |
+
+
+
+## Schematics
+![schematics](https://github.com/hdiessner/gardenirrigation/blob/master/hardware/Schematics.png "Schematics")
 
 # MQTT Topics
 
