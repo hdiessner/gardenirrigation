@@ -205,7 +205,8 @@ void publishDoor(){
 
 void publishMotion(){
   if(digitalRead(MOTION)){
-    client.publish("garden/cellarentrance/motion", "now");
+    prepareIntVal(millis());
+    client.publish("garden/cellarentrance/motion", returnmsg );
   }
 }
 
