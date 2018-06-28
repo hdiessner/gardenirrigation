@@ -36,19 +36,19 @@ github.
 # MQTT Topics
 
 ## Out
-| Topic                         | Payload          | Comment          |
-|-------------------------------|------------------|------------------|
-| garden/waterbox/system        | "startup"        | Startup / Reboot |  
-| garden/waterbox/temperature   | float            |                  |
-| garden/waterbox/humidity      | float            |                  |
-| garden/irrigation/waterlevel  | float            |                  |
-| garden/irrigation/leaf        | float            |                  |
-| garden/irrigation/soilfront   | float            |                  |
-| garden/irrigation/soilback    | float            |                  |
-| garden/waterbox/door          | "OPEN" / "CLOSE" |                  |
-| garden/cellarentrance/motion  | millis           |                  |
-| garden/irrigation/tempdeep    | float            |                  |
-| garden/irrigation/tempsurface | float            |                  |
+| Topic                         | Payload          | Comment            |
+|-------------------------------|------------------|--------------------|
+| garden/waterbox/system        | "startup"        | Startup / Reboot   |  
+| garden/waterbox/temperature   | float            |                    |
+| garden/waterbox/humidity      | float            |                    |
+| garden/irrigation/waterlevel  | float            |                    |
+| garden/irrigation/leaf        | float            |                    |
+| garden/irrigation/soilfront   | float            |                    |
+| garden/irrigation/soilback    | float            |                    |
+| garden/waterbox/door          | "OPEN" / "CLOSE" |                    |
+| garden/cellarentrance/motion  | millis           | time since startup |
+| garden/irrigation/tempdeep    | float            |                    |
+| garden/irrigation/tempsurface | float            |                    |
 
 ## In
 | Topic                      | Payload          |
