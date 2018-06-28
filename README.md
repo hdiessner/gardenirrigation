@@ -33,6 +33,10 @@ github.
 | DALLASPIN       |  45 | DS18B20  |
 | DHTPIN          |  47 | DHT22    |
 
+# Schematics
+![schematics](https://github.com/hdiessner/gardenirrigation/blob/master/hardware/Schematics.png "Schematics")
+
+
 # MQTT Topics
 
 ## Out
@@ -58,3 +62,5 @@ github.
 | garden/irrigation/rel3     | "on" / "off"     |
 | garden/irrigation/rel4     | "on" / "off"     |
 
+# Links
+https://gist.github.com/lx-88/413b48ced6b79300ea76
