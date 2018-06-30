@@ -16,24 +16,24 @@ github.
 
 ## Pinout ATMeta
 
-| I/O Description | PIN |  Remark  |
-|-----------------|-----|----------|
-| SOIL1           | A13 | Analog   |
-| SOIL2           | A14 | Analog   |
-| LEAFSENSOR      | A15 | Analog   |
-| REL1            |  22 | Output   |
-| REL2            |  24 | Output   |
-| REL3            |  26 | Output   |
-| REL4            |  28 | Output   |
-| WATERLEVEL1     |  31 | Pullup   |
-| WATERLEVEL2     |  33 | Pullup   |
-| WATERLEVEL3     |  35 | Pullup   |
-| WATERLEVEL4     |  37 | Pullup   |
-| WATERLEVEL5     |  39 | Pullup   |
-| MOTION          |  41 | Floating |
-| DOOR            |  43 | Pullup   |
-| DALLASPIN       |  45 | DS18B20  |
-| DHTPIN          |  47 | DHT22    |
+| I/O Description | PIN |  Remark  | Wire Color |
+|-----------------|-----|----------|------------|
+| SOILFRONT       | A13 | Analog   | 11 Yellow  |
+| SOILBACK        | A14 | Analog   | 12 Orange  |
+| LEAFSENSOR      | A15 | Analog   | 08 Pink    |
+| REL1            |  22 | Output   | Blue       |
+| REL2            |  24 | Output   | Green      |
+| REL3            |  26 | Output   | Yellow     |
+| REL4            |  28 | Output   | Orange     |
+| WATERLEVEL1     |  31 | Pullup   | 01 Yellow  |
+| WATERLEVEL2     |  33 | Pullup   | 02 Orange  |
+| WATERLEVEL3     |  35 | Pullup   | 03 Red     |
+| WATERLEVEL4     |  37 | Pullup   | 04 Brown   |
+| WATERLEVEL5     |  39 | Pullup   | 05 Black   |
+| MOTION          |  41 | Floating | 09 Blue    |
+| DOOR            |  43 | Pullup   | 07 Grey    |
+| DALLASPIN       |  45 | DS18B20  | 10 Green   |
+| DHTPIN          |  47 | DHT22    | 06 White   |
 
 ## DHT22
 Left to right 1,2,3,4
@@ -45,7 +45,23 @@ Left to right 1,2,3,4
 | 3      | NC      | White       |
 | 4      | GND     | Black       |
 
+## SOIL
+Numbers are defined by DMX connectors
 
+| Number | Purpose | Wire colour |
+|--------|---------|-------------|
+| 1|     | GND     | Black       |
+| 2|     | 5V      | Red         |
+| 3|     | Data    | Blank wire  |
+
+## DS18B20
+Numbers are defined by DMX connectors
+
+| Number | Purpose | Wire colour |
+|--------|---------|-------------|
+| 1|     | GND     | Black       |
+| 2|     | 5V      | Red         |
+| 3|     | Data    | Yellow      |
 
 ## Schematics
 ![schematics](https://github.com/hdiessner/gardenirrigation/blob/master/hardware/Schematics.png "Schematics")
@@ -53,19 +69,19 @@ Left to right 1,2,3,4
 # MQTT Topics
 
 ## Out
-| Topic                         | Payload          | Comment            |
-|-------------------------------|------------------|--------------------|
-| garden/waterbox/system        | "startup"        | Startup / Reboot   |  
-| garden/waterbox/temperature   | float            |                    |
-| garden/waterbox/humidity      | float            |                    |
-| garden/irrigation/waterlevel  | float            |                    |
-| garden/irrigation/leaf        | float            |                    |
-| garden/irrigation/soilfront   | float            |                    |
-| garden/irrigation/soilback    | float            |                    |
-| garden/waterbox/door          | "OPEN" / "CLOSE" |                    |
-| garden/cellarentrance/motion  | millis           | time since startup |
-| garden/irrigation/tempdeep    | float            |                    |
-| garden/irrigation/tempsurface | float            |                    |
+| Topic                         | Payload          | Comment               |
+|-------------------------------|------------------|-----------------------|
+| garden/waterbox/system        | "startup"        | Startup / Reboot      |  
+| garden/waterbox/temperature   | float            |                       |
+| garden/waterbox/humidity      | float            |                       |
+| garden/irrigation/waterlevel  | int 0..100       |                       |
+| garden/irrigation/leaf        | int 0..(2^10)-1  |                       |
+| garden/irrigation/soilfront   | int 0..(2^10)-1  |                       |
+| garden/irrigation/soilback    | int 0..(2^10)-1  |                       |
+| garden/waterbox/door          | "OPEN" / "CLOSE" |                       |
+| garden/cellarentrance/motion  | int              | seconds since startup |
+| garden/irrigation/tempdeep    | float            |                       |
+| garden/irrigation/tempsurface | float            |                       |
 
 ## In
 | Topic                      | Payload          |
