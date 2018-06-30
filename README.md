@@ -66,6 +66,41 @@ Numbers are defined by DMX connectors
 ## Schematics
 ![schematics](https://github.com/hdiessner/gardenirrigation/blob/master/hardware/Schematics.png "Schematics")
 
+## Print connectors
+
+      1 2 3 4 5 6
+  
+                       7
+                       8
+                       9
+                       0
+      ABCDEFGHIJKL
+
+| Nummer | Description   |
+|--------|---------------|
+| 1      | Water 100 %   |
+| 2      | Water  75 %   |
+| 3      | Water  50 %   |
+| 4      | Water  25 %   |
+| 5      | Water  15 %   |
+| 6      | GND           |
+| 7      | Temper Switch |
+| 8      | GND           |
+| 9      | Leaf Sensor   |
+| 0      | Leaf Sensor   |
+| A      | 5V            |
+| B      | GND           |
+| C      | Motion        |
+| D      | 5V            | 
+| E      | GND           |
+| F      | DS18B20       |
+| G      | 5V            |
+| H      | GND           |
+| I      | Soil Front    |
+| J      | 5V            |
+| K      | GND           |
+| L      | Soil Back     |
+
 # MQTT Topics
 
 ## Out
