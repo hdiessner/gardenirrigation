@@ -16,24 +16,25 @@ github.
 
 ## Pinout ATMeta
 
-| I/O Description | PIN |  Remark  | Wire Color |
-|-----------------|-----|----------|------------|
-| SOILFRONT       | A13 | Analog   | 11 Yellow  |
-| SOILBACK        | A14 | Analog   | 12 Orange  |
-| LEAFSENSOR      | A15 | Analog   | 08 Pink    |
-| REL1            |  22 | Output   | Blue       |
-| REL2            |  24 | Output   | Green      |
-| REL3            |  26 | Output   | Yellow     |
-| REL4            |  28 | Output   | Orange     |
-| WATERLEVEL1     |  31 | Pullup   | 01 Yellow  |
-| WATERLEVEL2     |  33 | Pullup   | 02 Orange  |
-| WATERLEVEL3     |  35 | Pullup   | 03 Red     |
-| WATERLEVEL4     |  37 | Pullup   | 04 Brown   |
-| WATERLEVEL5     |  39 | Pullup   | 05 Black   |
-| MOTION          |  41 | Floating | 09 Blue    |
-| DOOR            |  43 | Pullup   | 07 Grey    |
-| DALLASPIN       |  45 | DS18B20  | 10 Green   |
-| DHTPIN          |  47 | DHT22    | 06 White   |
+| I/O Description | PIN |  Remark  | Wire Color    |
+|-----------------|-----|----------|---------------|
+| SOILFRONT       | A13 | Analog   | 11 Yellow     |
+| SOILBACK        | A14 | Analog   | 12 Orange     |
+| LEAFSENSOR      | A15 | Analog   | 08 Pink       |
+| REL1            |  22 | Output   | Blue          |
+| REL2            |  24 | Output   | Green         |
+| REL3            |  26 | Output   | Yellow        |
+| REL4            |  28 | Output   | Orange        |
+| WATERLEVEL1     |  31 | Pullup   | 01 Yellow     |
+| WATERLEVEL2     |  33 | Pullup   | 02 Orange     |
+| WATERLEVEL3     |  35 | Pullup   | 03 Red        |
+| WATERLEVEL4     |  37 | Pullup   | 04 Brown      |
+| WATERLEVEL5     |  39 | Pullup   | 05 Black      |
+| MOTION          |  41 | Floating | 09 Blue       |
+| DOOR            |  43 | Pullup   | 07 Grey       |
+| DALLASPIN       |  45 | DS18B20  | 10 Green      |
+| DHTPIN          |  47 | DHT22    | 06 White      |
+| WATERFONTAIN    |  49 | Pullup   | Yellow Single |
 
 ## DHT22
 Left to right 1,2,3,4
@@ -69,7 +70,9 @@ Numbers are defined by DMX connectors
 ## Print connectors
 
       1 2 3 4 5 6
-  
+
+                            Y
+                            X
                             7
                             8
                             9
@@ -100,6 +103,8 @@ Numbers are defined by DMX connectors
 | J      | 5V            |
 | K      | GND           |
 | L      | Soil Back     |
+| X      | GND           |
+| Y      | Fontain Level |
 
 # MQTT Topics
 
@@ -117,13 +122,14 @@ Numbers are defined by DMX connectors
 | garden/cellarentrance/motion  | int              | seconds since startup |
 | garden/irrigation/tempdeep    | float            |                       |
 | garden/irrigation/tempsurface | float            |                       |
+| garden/fontain/waterlevel     | "OK" / "EMPTY"   |                       |
 
 ## In
 | Topic                      | Payload          |
 |----------------------------|------------------|
+| garden/fontain/pump        | "on" / "off"     |
+| garden/fontain/light       | "on" / "off"     |
 | garden/irrigation/rainpump | "on" / "off"     |
-| garden/irrigation/rel2     | "on" / "off"     |
-| garden/irrigation/rel3     | "on" / "off"     |
 | garden/irrigation/rel4     | "on" / "off"     |
 
 # Links
