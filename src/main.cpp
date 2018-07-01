@@ -25,6 +25,7 @@
 #define DOOR           43
 #define DALLASPIN      45
 #define DHTPIN         47
+#define FONTAINPIN     49
 #define DONOTUSE1      51 // MQTT Disconnects when used
 
 #define TEMPERATURE_PRECISION 12
@@ -210,6 +211,14 @@ void publishMotion(){
   }
 }
 
+void publishFontainLevel(){
+  if(digitalRead(FONTAINPIN)){
+    client.publish("garden/fontain/waterlevel", "OK");
+  }else{
+    client.publish("garden/fontain/waterlevel", "EMPTY");
+  }
+}
+
 void publishGroundTemp(){
   prepareFloatVal(sensors.getTempC(deepDallas));
   client.publish("garden/irrigation/tempdeep", returnmsg);
@@ -226,6 +235,7 @@ void publishSensors(){
   publishSoilfront();
   publishSoilback();
   publishDoor();
+  publishFontainLevel();
   publishMotion();
   publishGroundTemp();
 }
@@ -273,6 +283,7 @@ void configureGPIOs(){
   pinMode(WATERLEVEL4, INPUT_PULLUP);
   pinMode(WATERLEVEL5, INPUT_PULLUP);
   pinMode(DOOR,        INPUT_PULLUP);
+  pinMode(FONTAINPIN,  INPUT_PULLUP);
   pinMode(MOTION,      INPUT);
 }
 
