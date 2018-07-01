@@ -117,7 +117,7 @@ void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
 
 }
 
-void prepareIntVal(int val){
+void prepareIntVal(long int val){
   snprintf (returnmsg, sizeof(returnmsg), "%ld", val);
 }
 
