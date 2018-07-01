@@ -120,17 +120,17 @@ Numbers are defined by DMX connectors
 | garden/irrigation/soilback    | int 0..(2^10)-1  |                       |
 | garden/waterbox/door          | "OPEN" / "CLOSE" |                       |
 | garden/cellarentrance/motion  | int              | seconds since startup |
-| garden/irrigation/tempdeep    | float            |                       |
+| garden/irrigation/tempdeep    | float            | 4k7 at the sensor     |
 | garden/irrigation/tempsurface | float            |                       |
-| garden/fontain/waterlevel     | "OK" / "EMPTY"   |                       |
+| garden/fontain/waterlevel     | "OK" / "EMPTY"   | Install pointing down |
 
 ## In
-| Topic                      | Payload          |
-|----------------------------|------------------|
-| garden/fontain/pump        | "on" / "off"     |
-| garden/fontain/light       | "on" / "off"     |
-| garden/irrigation/rainpump | "on" / "off"     |
-| garden/irrigation/rel4     | "on" / "off"     |
+| Topic                      | Payload      |
+|----------------------------|--------------|
+| garden/fontain/pump        | "on" / "off" |
+| garden/fontain/light       | "on" / "off" |
+| garden/irrigation/rainpump | "on" / "off" |
+| garden/irrigation/rel4     | "on" / "off" |
 
 # Links
 https://gist.github.com/lx-88/413b48ced6b79300ea76
