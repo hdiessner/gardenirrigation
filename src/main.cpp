@@ -52,6 +52,7 @@ void reconnect() {
     if (client.connect("gartenErection")) {
       client.publish("garden/waterbox/system", "startup");
       client.subscribe("garden/irrigation/#");
+      client.subscribe("garden/fontain/#");
     } else {
       delay(1000);
     }
@@ -80,7 +81,7 @@ void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
     
   }
 
-  if (String("garden/irrigation/rel2") == topic){
+  if (String("garden/fontain/pump") == topic){
 
     if(String("on") == String(payload)){
       digitalWrite(REL2, false);
@@ -92,7 +93,7 @@ void callback(char* topicchars, byte* payloadbytes, unsigned int length) {
     
   }
 
-  if (String("garden/irrigation/rel3") == topic){
+  if (String("garden/fontain/light") == topic){
 
     if(String("on") == String(payload)){
       digitalWrite(REL3, false);
