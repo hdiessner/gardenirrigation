@@ -14,7 +14,7 @@ github.
 
 # Hardware
 
-## Pinout ATMeta
+## Pinout ATMega
 
 | I/O Description | PIN |  Remark  | Wire Color    |
 |-----------------|-----|----------|---------------|
