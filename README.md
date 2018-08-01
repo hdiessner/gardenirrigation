@@ -134,3 +134,5 @@ Numbers are defined by DMX connectors
 
 # Links
 https://gist.github.com/lx-88/413b48ced6b79300ea76
+http://wetter.bohlberg.de/wissen.php
+https://www.snip2code.com/Snippet/574358/Arduino-function-to-read-a-Vegetronix-VH/
